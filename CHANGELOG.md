@@ -6,98 +6,129 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Added
+## [1.1.0] - 2026-11-24
 
-- **Settings › Made by.** Who made Game Hub, a short note from them, links to their website and the GitHub project, and **Star on GitHub**, **Give feedback** (e-mail) and **Report a problem** (GitHub issues), with the version and license. The details live in `www/brand/about.json` so a fork can swap them; only `https:` and `mailto:` links are used.
-- **Release safety.** `tools\check-release.ps1` runs every code check (PowerShell 5.1 parse, ASCII, JavaScript, translations, advice tests) and a privacy scan of what Git would publish. It refuses settings, data, logs and backups, and any text containing your user name, PC name, user folder, game install folders, game folders, distinctive drive labels, backup folder, a non-noreply Git e-mail, lines from your own `release-denylist.txt`, or anything shaped like a token or private key. The list is built on your PC each time and never stored. `.githooks/pre-commit` runs it on every commit (`git config core.hooksPath .githooks`).
-- **Release zips from Git.** `tools\make-release.ps1 -Version x.y.z` checks the tree is committed, takes the notes from this changelog, runs the release check, and builds `dist\GameHub-x.y.z.zip` with `git archive` (so only committed files ship) plus its SHA-256. `-Publish` creates the GitHub release.
-- The repository is [izored/gamehub](https://github.com/izored/gamehub): issue links, the translation form and the changelog links point there.
-- **Controller support** (`www/gamepad.js`). See [Using a controller](docs/usage.md#using-a-controller).
-  - Works with DualSense, DualShock 4 and Xbox controllers, over USB or Bluetooth, and with DS4Windows' virtual Xbox controller.
-  - All connected controllers are merged into one, so a DualShock 4 seen twice through DS4Windows never acts twice.
-  - Buttons: the D-pad or left stick moves between cards, rows, tabs and buttons. ✕/A plays or presses, ○/B goes back, △/Y toggles Favorites and □/X opens the edit dialog. L1/R1 switch tabs, Options/Menu opens Settings, and the right stick scrolls.
-  - A bar of button hints shows PlayStation symbols or Xbox letters, to match the controller. Focus stays on the same card after re-renders.
-  - Input is ignored while Game Hub isn't the window in front, and a button still held when it comes back does nothing. Moving the mouse hands control back to the mouse.
-- **While you play** (`watch-game.ps1`). See [While you play](docs/usage.md#while-you-play).
-  - After a launch, Game Hub minimizes as soon as the game's main window opens, so the keyboard, mouse and controller go straight to the game.
-  - **Boot screens.** The small boot or splash screens many games show first (anti-cheat, launcher, logo) are skipped: a window counts at once from 960×540. A smaller window counts after 30 seconds as the game's only window.
-  - **Slow starts.** If no window has appeared after 90 seconds, Game Hub minimizes anyway, and brings the game's window to the front once it opens.
-  - It comes back to the front a few seconds after the game has fully closed.
-  - This works for every launcher: a game's processes are the programs inside its install folder.
-- **Settings › While you play:** two switches for these behaviours, also available as `minimizeOnLaunch` and `restoreAfterGame` in `config.json`. Both default to on, including for an existing `config.json` that doesn't have the keys.
-- **Settings › Controllers:** the controller buttons, plus a reminder for Steam games. If a Steam game ignores your controller, turn Steam Input on for that game in Steam, or leave it off when you use DS4Windows.
-- `logs\watch.log` records each launch watch: boot screens, the game window, minimize and restore. `watch-game.ps1 -List` checks that the Game Hub window can be found.
-- Docs:
-  - [usage](docs/usage.md) gains controller and *While you play* sections, with a note on why games treat USB, Bluetooth and DS4Windows differently, and the Steam Input reminder;
-  - [troubleshooting](docs/troubleshooting.md) gains a *A Steam game doesn't see my controller* checklist and more new entries;
-  - the [architecture](docs/architecture.md#the-launch-watcher-watch-gameps1) page explains the launch watcher.
-- **First-run setup page.** It replaces editing `config.json` before the first launch. See [The setup page](docs/usage.md#the-setup-page).
-  - Step 1: the drives Game Hub must never read. USB and removable drives are ticked for you, including USB SSDs that Windows reports as fixed. Only each drive's name and size are read on this page.
-  - Step 2: game folders. Folders Steam and the Xbox app fully manage are listed as covered; the folders of the other launchers, and top-level folders whose name looks like a game folder, are suggested and ticked. *Add folder...* adds any other.
-  - Step 3: start with Windows, minimize and restore while you play, language, and the lock (only when the PC has other accounts).
-  - Nothing is scanned until you click *Scan my games*. The first scan no longer starts on its own.
-- **Find your game folders with an AI** (setup page and Settings › Game folders). Game Hub writes a prompt for any AI assistant, naming the drives to stay away from, the folders already covered and the folders already in Game Hub. You paste the answer back; every path in it is checked (it exists, is not on a never-read drive, is not already covered, is not inside another folder, is not a whole drive or Windows folder) and only folders that pass can be added. The AI provider sees folder names, nothing else.
-- **Settings › Drives:** choose the drives Game Hub never reads from the page (`excludeDriveLetters`), then save and rescan.
-- **Play time.** See [Play time](docs/usage.md#play-time).
-  - Every game started from Game Hub records its play session (start, end, minutes) in `data\sessions.jsonl`. Sessions under a minute are ignored.
-  - Steam's own play time is imported from its local settings (`localconfig.vdf`), so Steam games show their full history from day one.
-  - Cards and the billboard show the hours played; a **Most played** row joins the home page.
-  - **Sort by** in every grid (all games, a launcher, a drive, search results): name, most played, recently played, recently added, size. The choice is remembered.
-  - Optional: **Count games started outside Game Hub** (Settings › While you play, `trackOutsideLaunches`, off by default). `track-games.ps1` checks once a minute which games are running. A game is never counted twice.
-- **More launchers:** GOG Galaxy, Battle.net, Riot Client, Amazon Games, Rockstar Games Launcher, and the Xbox app (Microsoft Store and PC Game Pass games). Each has its own tab when you have games there. Details in [Launchers](docs/launchers.md).
-- **Backups of Game Hub.** See [Backups](docs/usage.md#backups).
-  - Once a day, when something changed, Game Hub saves `config.json`, `overrides.json`, the game list with every game's folder, favorites and launches, play time, game window titles and custom covers to a zip in `data\backups`, with a `my-games.csv` inside. Game files and game saves are not included.
-  - It keeps every backup of the last 48 hours (up to 20), one per day for 7 days and one per week for 4 weeks.
-  - Settings › Backups: the list, **Restore** (the current state is backed up first, so a restore can be undone), **Back up now**, **Also copy backups to** another folder (`backupCopyTo`), and **Download my games list (CSV)**.
-  - **Self-repair:** at startup, a settings or data file left empty, zeroed or unreadable by a crash or a power cut is put back from the newest good backup, and a banner on the page says so.
-- **Lock Game Hub to your Windows account** (optional, `lockToAccount`, off by default). Settings › Security only appears when the PC has other user accounts. See [SECURITY.md](SECURITY.md#optional-lock-to-your-windows-account).
-- **DS4Windows rules per game** (Settings › Controllers and the Edit dialog, only when DS4Windows is installed): keep DS4Windows on, turn it off, or use one of its profiles while each game runs. Game Hub writes DS4Windows' own *Auto Profiles* rules, matching the game's folder and, for games with anti-cheat, its window title, then restarts DS4Windows. See [Controllers](docs/controllers.md#ds4windows-rules-per-game).
-- **Which games need DS4Windows?** Settings › Controllers suggests, for every game, whether DS4Windows should stay on or turn off, and says why. See [Controllers](docs/controllers.md#which-games-need-ds4windows).
-  - **Your controllers:** Game Hub reads from Windows which PlayStation controllers are connected or paired, and how (USB or Bluetooth). You can change it.
-  - **Check my games** (only when you press it, `check-controllers.ps1`) looks each game up on PCGamingWiki and Steam's store, and looks for Sony's controller library in the game folder. Only game names and Steam app numbers are sent.
-  - **Steam Input:** for Steam games, Game Hub reads Steam's own per-game setting.
-  - **Use the suggestions** fills in every choice that has a suggestion; DS4Windows changes only when you apply.
-  - **Your answer wins:** after you play a game whose suggestion is unsure, Game Hub asks once how the controller worked, and **Tell Game Hub** does the same for any game at any time. Answers are kept in `data\controller-feedback.json` and included in backups.
-  - A tip appears when DS4Windows also takes over your DualSense, which most games understand by themselves.
-  - `tools/test-pad-advice.js` checks the suggestion rules.
-- **On-screen keyboard** for controllers: Share / View opens it for the search box or the text field in focus.
-- **Bring Game Hub back with the controller:** hold View + Menu (Share + Options through DS4Windows) for 1.5 seconds anywhere in Windows (`controller-helper.ps1`, `controllerSummon`, on by default).
-- **Languages:** the page is available in English, French, Spanish, Portuguese (Brazil), German, Russian, Simplified Chinese, Japanese, Korean, Polish and Turkish (`www/lang/`). It follows the browser's language, or the one chosen in Settings › Language (`language`). The 10 non-English languages were translated by an AI and say so in Settings, with a link to report a wrong translation. Missing text falls back to English.
-- `tools/check-translations.ps1` checks that every text the page uses exists in English and that translations keep their placeholders.
-- Docs: [Controllers](docs/controllers.md) (Xbox, DualSense and DualShock 4 in Game Hub and in games, Steam Input, DS4Windows, double input, USB or Bluetooth), [Staying safe](docs/staying-safe.md) (general security advice for gaming PCs), [Translating](docs/translating.md), and a *Wrong or missing translation* issue form.
+![Game Hub: the home page, with a featured game on the billboard and the Favorites row](https://raw.githubusercontent.com/izored/gamehub/main/docs/images/home.jpg)
 
-### Changed
+**Every game on your PC, in one place.** This is the first public release of Game Hub.
 
-- **Your data now lives apart from the program,** in `%LOCALAPPDATA%\GameHub`: `config.json`, `overrides.json`, `data\` and `logs\`. The program folder holds nothing personal, so it can be anywhere (even Program Files), replaced whole by an update, or published. The first start after updating copies the old files over, checks every one arrived, and leaves the originals with a `DATA-MOVED.txt` note; delete them once everything works. **Settings › Backups** shows the folder. A `portable.txt` file next to `server.ps1` keeps the data in the program folder (USB drives, development copies), and `GAMEHUB_DATA` names another folder. See [Where your data lives](docs/installation.md#where-your-data-lives). Scripts take `-Root` for the program folder as before.
-- **Install folder.** The docs now suggest `%LOCALAPPDATA%\Programs\GameHub` for the program, and the release zip from the GitHub releases page.
-- **Billboard slideshow.** With no favorite picked, the billboard starts on the featured game, then moves through the Game Hub banner and every game in the library, in a new shuffled order each round, one every 2 seconds. No game is named in the code: it uses whatever each library has, and games without wide art appear on a blurred version of their cover or icon. It holds still while the pointer or controller focus is on it, so Play, Open folder and the pen always act on the game you see. It also holds while a dialog is open, the page is scrolled down or hidden, or Windows is set to reduce animations. With no games yet, the billboard shows the Game Hub banner instead of disappearing.
-- **Brand assets in one folder,** `www/brand/`: `logo.svg`, `favicon.svg`, `icon.ico` (the shortcut icon, previously `gamehub.ico` at the root), `banner.svg` (a placeholder for now) and `brand.css` (colours, fonts, radius and shadow, moved out of `style.css`). Replace a file under the same name to rebrand; [its README](www/brand/README.md) gives sizes and where each one shows. `install-shortcuts.ps1` only draws the icon when it is missing, and the server serves `/brand/*`. The look is unchanged.
-- **Billboard follows your favorites.** Pointing at a card in the Favorites row, or moving to it with a controller, shows that game on the billboard: its background, logo, details and play time, with a short crossfade. It stays until you point at another favorite, so the billboard's Play button plays the game you were looking at. A favorite without background art gets its wide header or a blurred icon. See [the home page](docs/usage.md).
-- **Controller on Home:** moving between the billboard buttons and the Favorites cards no longer scrolls the page and shrinks the billboard. The page only scrolls when you move to another row, or when the Favorites row does not fit in a short window.
-- `open-hub.ps1` opens Game Hub as a Microsoft Edge app window when Google Chrome isn't installed, instead of a normal browser tab. Both browsers are looked up for the current user as well as machine-wide.
-- **API.** `GET /api/settings` and the response of `POST /api/settings` include `minimizeOnLaunch` and `restoreAfterGame`, and `POST /api/settings` accepts them. `POST /api/launch` starts the launch watcher.
-- **No more VBScript.** Shortcuts start Game Hub with the console host's hidden mode (`conhost.exe --headless`, Windows 10 2004 and later), because Windows is phasing VBScript out. `gamehub.vbs` stays as the fallback on older Windows. Run `install-shortcuts.ps1` again to update existing shortcuts.
-- The launch watcher now runs after every launch, to record play time, even with both *While you play* switches off. It also remembers each game's window title (`data\game-windows.json`) for the DS4Windows rules.
-- `config.example.json` gains `language`, `trackOutsideLaunches`, `controllerSummon`, `lockToAccount` and `backupCopyTo`, and its `gameRoots` is just `C:\Games`: the setup page fills in the rest.
-- **API** (internal, see [HTTP API](docs/api.md)):
-  - new: `GET /api/setup/drives`, `POST /api/setup/folders`, `POST /api/setup/check`, `POST /api/setup/finish`, `GET /api/backups`, `POST /api/backups/create`, `POST /api/backups/restore`, `GET /export/my-games.csv`, `GET` and `POST /api/ds4windows`, `GET /lang/<file>`;
-  - `GET /api/games` adds `playtime` and `extra` (`needsSetup`, `notes`, `language`); games gain `steamMinutes` and, for Xbox app games, `storeId`;
-  - `GET` and `POST /api/settings` add `drives`, `excludeDriveLetters`, `trackOutsideLaunches`, `controllerSummon`, `language`, `lockToAccount`, `otherAccounts`, `backupCopyTo` and `ds4windows`; `POST /api/game/save` accepts `ds4`;
-  - error responses add a `code` (and sometimes an `arg`) so the page can show them in the chosen language.
-- **DS4Windows API:** `GET /api/ds4windows` adds `controls`, `wraps`, `hides`, `pads`, `facts`, `checkedAt`, `progress`, `checking` and `feedback`; new `POST /api/ds4windows/check` and `POST /api/ds4windows/feedback`; `POST /api/settings` accepts `pads`. `config.json` gains the optional `pads` and `ds4windowsFolder`.
-- Started from PowerShell 7 (for example from Windows Terminal), Windows PowerShell inherits PowerShell 7's module folders and can fail to load its own modules. The server now removes those folders from its module path at startup.
+I build tools I want to use. My games were spread over Steam, Epic, EA, Ubisoft and a few folders of their own. Every launcher showed only its share, and a launcher reinstall could quietly forget games that were still on the disk. Game Hub finds all of them, shows them with their real cover art like a streaming app, and starts any of them with one click, through its own launcher when it has one. It runs on your PC, needs no account and sends nothing about you anywhere.
 
-### Security
+Version 1.0.0 was the first build, and only I used it. Everything that came after is listed below. New here? Start with *What to expect*.
 
-- The launch watcher reads only window titles and executable paths, using *query limited information* rights. It never opens, reads or stops a process, and it only minimizes and restores browser windows titled exactly `Game Hub`. The game id it receives must match `[A-Za-z0-9._-]+`.
-- **Optional lock:** `data\session.key` holds a random 256-bit key readable only by the account that runs Game Hub (plus SYSTEM and administrators); `open-hub.ps1` swaps it for an `HttpOnly`, `SameSite=Strict` cookie. Every API, artwork and export request then needs that cookie (401, code `locked`). If the key cannot be created, the lock is switched back off and the page shows an error instead of pretending to be locked.
-- New launcher links are allowlisted exactly: `battlenet://`, `amazon-games://`, and `shell:AppsFolder\<package>!<app>` for Xbox app games, which starts through Windows Explorer.
-- The setup page and the folder check never read a never-read drive: drives are described from Windows' own drive list, and folder suggestions only list top-level folder names on allowed fixed drives.
-- A restore only writes Game Hub's own files listed in the backup (`config.json`, `overrides.json`, files in `data\` and custom covers), never a path taken from the zip.
-- DS4Windows: Game Hub only changes the rules it wrote itself (listed in `data\ds4windows-managed.json`) and keeps a copy of the previous rules file in `data\backups`. It never changes DS4Windows' other settings, and never restarts a DS4Windows whose settings folder isn't the one it wrote to.
-- Check my games runs only when you press it and sends only game names and Steam app numbers.
+### 🧭 What to expect
+
+- 🎮 **Every launcher in one library.** Steam, Epic Games, EA app, Ubisoft Connect, GOG Galaxy, Battle.net, Riot, Amazon Games, Rockstar and the Xbox app (Microsoft Store and PC Game Pass), plus standalone games in folders you choose. Games a launcher forgot after a reinstall still show up: Game Hub finds them from their own files.
+- 🖼️ **A home page that feels like a streaming app.** A large billboard that moves through your games, then Favorites, Continue playing, Most played, Recently added and one row per launcher, all with official cover art. Upload your own art for anything that has none.
+- ⏱️ **Play time.** Every game you start from Game Hub records its sessions, and Steam's own play time is imported, so your history starts full.
+- 🕹️ **Made for the couch too.** DualSense, DualShock 4 and Xbox controllers drive the whole hub, with an on-screen keyboard for search. Hold View + Menu anywhere in Windows to bring Game Hub back. If you use DS4Windows, Game Hub suggests which games need it and switches it game by game.
+- 🪟 **It gets out of the way.** Game Hub minimizes once the game's window opens and comes back when you quit.
+- 💾 **Your data stays yours.** Settings, library, favorites and play time live in `%LOCALAPPDATA%\GameHub`, with daily backups you can restore from Settings. Game files are never moved, changed or deleted.
+- 🌍 **11 languages.** English, French, Spanish, Portuguese (Brazil), German, Russian, Simplified Chinese, Japanese, Korean, Polish and Turkish. The ten translations were made with an AI, and Settings links to a form to report a wrong one.
+
+### 📋 Before you install
+
+- 💻 **Windows 10 or 11,** with Windows PowerShell 5.1, which is part of Windows. No administrator rights, no installer, no Windows service, no registry changes.
+- 🌐 **Google Chrome or Microsoft Edge** for the app window. Edge comes with Windows.
+- 📡 **What goes online:** artwork lookups (game titles and store ids, sent to Steam's store and image servers, Epic's image servers and the Microsoft Store catalog) and, only when you press **Check my games**, controller lookups on PCGamingWiki and Steam. Nothing else, and no telemetry. [Privacy](https://github.com/izored/gamehub#privacy) lists every call.
+- 🛡️ **Antivirus.** Game Hub is a set of PowerShell scripts that run without a window, and some antivirus products question that. Never turn your protection off for it: [Troubleshooting](https://github.com/izored/gamehub/blob/main/docs/troubleshooting.md#the-hub-doesnt-open-or-the-page-says-it-cant-connect) explains what to allow.
+- 💽 **Drives you keep private.** On the first start, you choose the drives Game Hub must never read. USB drives are ticked for you.
+
+### 📦 Install
+
+1. Download **GameHub-1.1.0.zip** from the assets below.
+2. Extract it, for example to `%LOCALAPPDATA%\Programs\GameHub`.
+3. Open that folder, right-click an empty spot and choose **Open in Terminal** (on Windows 10: Shift + right-click, **Open PowerShell window here**). Paste this and press Enter:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
+   ```
+
+   **What this runs.** `install-shortcuts.ps1` is a short script: [read it on GitHub](https://github.com/izored/gamehub/blob/v1.1.0/install-shortcuts.ps1) before you run it. It:
+
+   - creates your data folder, `%LOCALAPPDATA%\GameHub`, where your settings and game list will live ([`lib/paths.ps1`](https://github.com/izored/gamehub/blob/v1.1.0/lib/paths.ps1));
+   - removes Windows' *downloaded from the internet* tag from Game Hub's own files, and from nothing else;
+   - makes three shortcuts with the Game Hub icon: **Game Hub** on your Desktop and in the Start menu, and **Game Hub Server** in your Startup folder, which starts Game Hub's small local server when you sign in (you can turn that off in **Settings › Startup**). They start PowerShell without a window ([`lib/shortcuts.ps1`](https://github.com/izored/gamehub/blob/v1.1.0/lib/shortcuts.ps1));
+   - opens Game Hub ([`open-hub.ps1`](https://github.com/izored/gamehub/blob/v1.1.0/open-hub.ps1)). That starts the server, which only answers on your own PC (`localhost`), and shows the hub in a Chrome or Edge app window.
+
+   It downloads nothing and changes nothing else on your PC. `-ExecutionPolicy Bypass` applies to this one command only: your PowerShell settings stay as they are. Running it again just refreshes the shortcuts.
+
+   Game Hub then opens on the setup page: three questions, and nothing is scanned until you click **Scan my games**.
+
+**No administrator rights needed.** It works on a standard Windows account, as long as you extract to a folder you can write to: anywhere in your own user folder is fine, `Program Files` is not.
+
+**On a work or school PC,** PowerShell may still answer *running scripts is disabled on this system*. That's a rule set by the organisation, and Game Hub won't try to get around it. Ask whoever manages the PC.
+
+Would you rather have an AI assistant do the setup? [Set up with AI](https://github.com/izored/gamehub/blob/main/docs/setup-with-ai.md) works with Claude Code, Codex, Copilot or a chat assistant. The full guide is in [Installation](https://github.com/izored/gamehub/blob/main/docs/installation.md).
+
+### 💬 Tell me how it goes
+
+- ⭐ If Game Hub is useful to you, **star the repository**: it helps other people find it.
+- 🐛 Something wrong? [Report a problem](https://github.com/izored/gamehub/issues/new/choose). There are forms for bugs, feature requests (a missing launcher, for example) and wrong translations. The logs in `%LOCALAPPDATA%\GameHub\logs` help a lot.
+- ✉️ Anything else: **Settings › Made by › Give feedback**.
+
+### ✨ Added
+
+- 🎮 **Controllers drive the whole hub.** DualSense, DualShock 4 and Xbox controllers, over USB or Bluetooth, and DS4Windows' virtual Xbox controller. All connected controllers count as one, so a DualShock 4 seen twice through DS4Windows never presses twice. The D-pad or left stick moves between cards, rows, tabs and buttons. ✕/A plays, ○/B goes back, △/Y stars a game, □/X edits it, L1/R1 switch tabs, Options/Menu opens Settings and the right stick scrolls. The button hints match your controller. Input is ignored while Game Hub isn't the window in front, and moving the mouse hands control back. [Using a controller](https://github.com/izored/gamehub/blob/main/docs/usage.md#using-a-controller)
+- ⌨️ **An on-screen keyboard.** Share / View opens it for the search box or the text field in focus.
+- 🔁 **Bring Game Hub back from anywhere.** Hold View + Menu (Share + Options through DS4Windows) for 1.5 seconds, wherever you are in Windows.
+- 🪟 **Game Hub steps aside while you play.** It minimizes as soon as the game's main window opens, so the keyboard, mouse and controller go straight to the game. It comes back a few seconds after the game has fully closed. Splash and anti-cheat screens don't count: a window counts at once from 960×540, a smaller one after 30 seconds. If no window appears within 90 seconds, Game Hub steps aside anyway and brings the game to the front when it opens. It works with every launcher. Both switches are in **Settings › While you play**. [While you play](https://github.com/izored/gamehub/blob/main/docs/usage.md#while-you-play)
+- 🧩 **A setup page instead of a settings file.** Three steps. First, the drives Game Hub must never read: USB drives are ticked for you, even the ones Windows calls fixed, and only drive names and sizes are read there. Then your game folders, suggested for you or added by hand. Then a few options. Nothing is scanned until you click **Scan my games**. [The setup page](https://github.com/izored/gamehub/blob/main/docs/usage.md#the-setup-page)
+- 🤖 **Find your game folders with an AI.** Game Hub writes a prompt for the assistant of your choice. The prompt names the drives to stay away from and the folders already covered. You paste the answer back, and every path is checked before it can be added. The assistant sees folder names, nothing else, and Game Hub itself never contacts an AI.
+- ⏱️ **Play time.** Every session started from Game Hub is recorded; anything under a minute is ignored. Steam's own play time is imported, cards and the billboard show the hours, and a **Most played** row joins the home page. Every grid can be sorted by name, most played, recently played, recently added or size. You can also count games started outside Game Hub: it checks once a minute, and never counts a game twice. [Play time](https://github.com/izored/gamehub/blob/main/docs/usage.md#play-time)
+- 🧭 **Six more launchers:** GOG Galaxy, Battle.net, Riot Client, Amazon Games, Rockstar Games Launcher and the Xbox app, with Microsoft Store and PC Game Pass games. Each gets its own tab. [Launchers](https://github.com/izored/gamehub/blob/main/docs/launchers.md)
+- 💾 **Game Hub backs itself up.** Once a day when something changed, it saves a zip of your settings, fixes, game list, favorites, play time and custom covers, with a `my-games.csv` inside. Game files and saves are not included. It keeps every backup of the last 48 hours, one a day for a week and one a week for a month. **Settings › Backups** has Restore (the current state is backed up first, so a restore can be undone), Back up now, a second folder to copy backups to, and your games list as a CSV. A file left damaged by a crash or a power cut is put back from the newest good backup at the next start, and a banner says so. [Backups](https://github.com/izored/gamehub/blob/main/docs/usage.md#backups)
+- 🔐 **Lock Game Hub to your Windows account.** Optional, and only offered when the PC has other accounts. Other users then see a locked page and nothing else. [How the lock works](https://github.com/izored/gamehub/blob/main/SECURITY.md#optional-lock-to-your-windows-account)
+- 🎛️ **DS4Windows, game by game.** Keep it on, turn it off, or use one of its profiles while each game runs. Game Hub writes DS4Windows' own Auto Profiles rules, matching the game's folder and, for games with anti-cheat, its window title. Your own rules are kept. [DS4Windows rules](https://github.com/izored/gamehub/blob/main/docs/controllers.md#ds4windows-rules-per-game)
+- 🧪 **Which games need DS4Windows?** A suggestion for every game, with the reason. Game Hub looks at the controllers you use and how they're connected (USB or Bluetooth), Steam Input for Steam games, and Sony's controller files in the game folder. When you press **Check my games**, it also asks PCGamingWiki and Steam's store, sending only game names and Steam app numbers. Your own answer after playing always wins. [Which games need DS4Windows](https://github.com/izored/gamehub/blob/main/docs/controllers.md#which-games-need-ds4windows)
+- 🌍 **11 languages.** The page follows your browser, or your choice in **Settings › Language**. The ten non-English languages were translated by an AI and say so, with a link to report a mistake. Anything missing falls back to English.
+- 🙋 **Settings › Made by.** Who made Game Hub, links to the website and this repository, **Star on GitHub**, **Give feedback** and **Report a problem**, with the version.
+- 📚 **New guides:** [Controllers](https://github.com/izored/gamehub/blob/main/docs/controllers.md) (Xbox, DualSense and DualShock 4, Steam Input, DS4Windows, USB or Bluetooth), [Staying safe](https://github.com/izored/gamehub/blob/main/docs/staying-safe.md) (security advice for gaming PCs) and [Translating](https://github.com/izored/gamehub/blob/main/docs/translating.md).
+
+### 🔄 Changed
+
+- 📁 **Your data now lives apart from the program,** in `%LOCALAPPDATA%\GameHub`. The program folder holds nothing personal, so it can be anywhere, even Program Files, and an update can replace it whole. **Settings › Backups** shows the data folder. Coming from 1.0.0, the first start copies your settings, game list and logs over and checks that every file arrived. The originals stay, with a `DATA-MOVED.txt` note: delete them once you're happy. A `portable.txt` file next to `server.ps1` keeps the data next to the scripts instead, for a copy on a USB drive. [Where your data lives](https://github.com/izored/gamehub/blob/main/docs/installation.md#where-your-data-lives)
+- 🎞️ **The billboard moves through your library.** With no favorite picked, it starts on your newest or last-played game. Then it shows the Game Hub banner and every game in a new shuffled order each round, one every 2 seconds. It holds still while your pointer or controller is on it, so **Play** always starts the game you see. Games without wide art appear on a blurred version of their cover.
+- ⭐ **Point at a favorite and the billboard shows it,** with its art, logo, details and play time. It stays there, so the billboard's **Play** starts the game you were looking at.
+- 🎯 **The controller keeps the billboard whole.** Moving between the billboard and the Favorites row keeps the page still. It scrolls when you move on to another row.
+- 🚫 **No more VBScript.** Windows is phasing VBScript out, so the shortcuts now start Game Hub through Windows' own hidden console (`conhost --headless`). Windows 10 versions older than 2004 keep the VBScript fallback. Coming from 1.0.0, run `install-shortcuts.ps1` once.
+- 🧰 **Installing is one command.** `install-shortcuts.ps1` removes Windows' downloaded-file tag from Game Hub's own files, so there is nothing to unblock, and opens Game Hub when it's done (`-NoOpen` skips that).
+- 🌐 **Edge when there's no Chrome.** Game Hub opens as an Edge app window instead of a normal browser tab.
+- 🎨 **Brand assets in one folder,** `www/brand`: the logo, icons, banner (a placeholder for now), colours, fonts and the *Made by* details. To rebrand, swap a file. [Brand assets](https://github.com/izored/gamehub/blob/main/www/brand/README.md)
+- 🐚 **Starting from PowerShell 7 works.** Windows PowerShell started from PowerShell 7, for example in Windows Terminal, could load PowerShell 7's modules and fail. The server now cleans its module path when it starts.
+
+### 🔒 Security
+
+- 👀 **The launch watcher only looks.** It reads window titles and program paths, never opens, reads or stops a process, and only minimizes and restores the window titled exactly *Game Hub*.
+- 🔑 **The optional lock** uses a random 256-bit key that only your account can read, swapped for an `HttpOnly`, `SameSite=Strict` cookie. If the key can't be created, the lock switches itself back off and says so.
+- 🔗 **New launcher links are allowlisted exactly:** `battlenet://`, `amazon-games://` and the Xbox app's `shell:AppsFolder` entries.
+- 💽 **Private drives stay unread,** even on the setup page. Drives are described from Windows' own drive list, and folder suggestions only list top-level folder names on allowed drives.
+- 📦 **A restore only writes Game Hub's own files,** never a path taken from the zip.
+- 🎛️ **DS4Windows:** Game Hub only changes the rules it wrote itself, keeps a copy of the previous rules file, and never touches DS4Windows' other settings.
+
+<details>
+<summary>🧑‍💻 For developers and contributors</summary>
+
+- **Checks before every commit.** `tools\check-release.ps1` runs every check: PowerShell 5.1 parsing, ASCII-only scripts, JavaScript syntax, translations and the DS4Windows suggestion tests. It also runs a privacy scan of what Git would publish. That scan refuses settings, data, logs and backups, and any text that contains your user folder, PC name, game folders, distinctive drive labels or anything shaped like a token. The list is built on your PC each time and never stored. Turn on the pre-commit hook with `git config core.hooksPath .githooks`. A `portable.txt` in a development copy keeps its data apart from your everyday hub. See [Contributing](https://github.com/izored/gamehub/blob/main/CONTRIBUTING.md).
+- **Releases from Git.** `tools\make-release.ps1 -Version x.y.z` builds the zip with `git archive`, so only committed files ship. It takes the notes from this changelog and refuses to build if the tree isn't committed or the version in `www/brand/about.json` doesn't match.
+- **New HTTP endpoints** (internal, [HTTP API](https://github.com/izored/gamehub/blob/main/docs/api.md)):
+  - setup: `GET /api/setup/drives`, `POST /api/setup/folders`, `POST /api/setup/check`, `POST /api/setup/finish`;
+  - backups: `GET /api/backups` (now with the data folder), `POST /api/backups/create`, `POST /api/backups/restore`, `GET /export/my-games.csv`;
+  - controllers: `GET` and `POST /api/ds4windows`, `POST /api/ds4windows/check`, `POST /api/ds4windows/feedback`;
+  - static files: `GET /lang/<file>`, `GET /brand/<file>`.
+- **Changed endpoints:**
+  - `GET /api/games` adds `playtime` and `extra` (`needsSetup`, `notes`, `language`), and games gain `steamMinutes` and, for Xbox app games, `storeId`;
+  - `GET` and `POST /api/settings` add `drives`, `excludeDriveLetters`, `minimizeOnLaunch`, `restoreAfterGame`, `trackOutsideLaunches`, `controllerSummon`, `language`, `lockToAccount`, `otherAccounts`, `backupCopyTo`, `ds4windows`, `pads` and `data`;
+  - `POST /api/game/save` accepts `ds4`, and `POST /api/launch` starts the launch watcher;
+  - errors carry a `code` (and sometimes an `arg`) so the page can show them in the chosen language.
+- **Configuration:** `config.example.json` gains `language`, `trackOutsideLaunches`, `controllerSummon`, `lockToAccount` and `backupCopyTo`, and its `gameRoots` is just `C:\Games` (the setup page fills in the rest). `config.json` also accepts `pads` and `ds4windowsFolder`. Every script still takes `-Root` for the program folder; `GAMEHUB_DATA` names another data folder.
+- **The launch watcher** runs after every launch to record play time, even with both *While you play* switches off. It also remembers each game's window title for the DS4Windows rules. It only accepts a game id matching `[A-Za-z0-9._-]+`. `watch-game.ps1 -List` checks that the Game Hub window can be found, and `logs\watch.log` records every step.
+
+</details>
 
 ## [1.0.0] - 2026-11-21
+
+The first build, used privately before Game Hub went public. It was never released on its own: everything in it ships in 1.1.0.
 
 First public release.
 
@@ -176,5 +207,5 @@ First public release.
 - Executable and folder paths on excluded drives are refused before they are touched.
 - The web app never inserts game data as HTML.
 
-[Unreleased]: https://github.com/izored/gamehub/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/izored/gamehub/releases/tag/v1.0.0
+[Unreleased]: https://github.com/izored/gamehub/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/izored/gamehub/releases/tag/v1.1.0

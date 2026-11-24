@@ -49,20 +49,14 @@ Games end up everywhere. Some come from Steam, some from Epic or the EA app. Oth
 
 ## Quick start
 
-1. **Get the files.** Clone the repository, or download `GameHub-<version>.zip` from the [latest release](https://github.com/izored/gamehub/releases/latest) and extract it. Any folder works, for example `%LOCALAPPDATA%\Programs\GameHub`: your settings and data are kept apart, in `%LOCALAPPDATA%\GameHub`.
-2. **Unblock the scripts.** This is only needed if you downloaded the ZIP. Run it in PowerShell from inside the folder:
+1. **Get the files.** Clone the repository, or download `GameHub-<version>.zip` from the [latest release](https://github.com/izored/gamehub/releases/latest) and extract it. Any folder you can write to works, for example `%LOCALAPPDATA%\Programs\GameHub`: your settings and data are kept apart, in `%LOCALAPPDATA%\GameHub`. No administrator rights needed.
+2. **Run the installer** from that folder (right-click an empty spot › **Open in Terminal**). [`install-shortcuts.ps1`](install-shortcuts.ps1) is short, so read it first if you like. It creates your data folder, removes Windows' downloaded-file tag from Game Hub's own files, and makes Desktop and Start menu shortcuts, plus a Startup entry so the server is ready at logon. Then it opens Game Hub. It downloads nothing and changes nothing else:
 
    ```powershell
-   Get-ChildItem -Recurse | Unblock-File
+   powershell -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
    ```
 
-3. **Create the shortcuts.** This makes Desktop and Start menu shortcuts, plus a Startup entry so the server is ready at logon:
-
-   ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
-   ```
-
-4. **Open Game Hub** from the Desktop or Start menu. The setup page opens:
+3. **The setup page opens:**
    1. Tick the drives Game Hub must never read, such as a USB SSD or a backup disk. USB drives are ticked for you.
    2. Check the suggested game folders, add your own, or let an AI assistant find them.
    3. Pick a few options, then click **Scan my games**. Covers download right after; the page fills in by itself, usually within a minute or two.

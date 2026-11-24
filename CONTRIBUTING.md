@@ -8,6 +8,7 @@ Thanks for helping. Bug reports, launcher support, better game detection and UI 
 - [Adding a launcher](#adding-a-launcher)
 - [Adding or changing text](#adding-or-changing-text)
 - [Reporting bugs](#reporting-bugs)
+- [Releasing](#releasing)
 
 ## Ground rules
 
@@ -152,6 +153,23 @@ Open an issue with the bug template. Include:
 Logs and `games.json` contain folder paths and game names, so remove anything you consider private before posting.
 
 Security problems: please follow [SECURITY.md](SECURITY.md) instead of opening a public issue.
+
+## Releasing
+
+The release page is the changelog. The version's section of `CHANGELOG.md` becomes the release notes word for word, with the zip's SHA-256 added under the heading. So write it for the people who will read the release page:
+
+- one bullet per change: a unique emoji, a **bold sentence that says what is now true**, then plain words on what was wrong or what it brings;
+- full `https://github.com/izored/gamehub/blob/main/...` links: a release page can't follow links relative to the repository, and `make-release.ps1` refuses them;
+- when you point at a script people will run, link the release's own copy (`https://github.com/izored/gamehub/blob/vx.y.z/...`), so they read exactly what is in the zip, and say in plain words what it does;
+- technical details (API, configuration) inside a `<details>` block at the end.
+
+Then:
+
+1. Rename `## [Unreleased]` to `## [x.y.z] - <date>`, add an empty `## [Unreleased]` above it, and update the links at the bottom of the changelog.
+2. Set `version` in `www/brand/about.json` to the same number. **Settings › Made by** shows it.
+3. Preview the notes: `powershell -ExecutionPolicy Bypass -File tools\make-release.ps1 -Version x.y.z -Title "<one-line headline>" -NotesOnly` writes `dist\notes-x.y.z.md`.
+4. Commit and push.
+5. Run the same command with `-Publish` instead of `-NotesOnly`. It checks the tree is committed and pushed, runs `tools\check-release.ps1`, builds `dist\GameHub-x.y.z.zip` with `git archive`, and creates the release **Game Hub vx.y.z — headline** with the zip and its checksum.
 
 ## Code of conduct
 

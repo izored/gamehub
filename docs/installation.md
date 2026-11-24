@@ -16,7 +16,7 @@ Game Hub is a folder of scripts. Installing it means putting that folder somewhe
 - **Windows 10 or 11.** On Windows 10 version 2004 (May 2020) or later and on Windows 11, Game Hub starts without any console window and without VBScript. Older Windows 10 versions use the included VBScript helper instead.
 - **Windows PowerShell 5.1.** It's preinstalled on both. The scripts start `powershell.exe` explicitly, so PowerShell 7 isn't used or needed.
 - **A browser.** The hub opens as a standalone app window in Google Chrome (`chrome --app`), or in Microsoft Edge if Chrome isn't installed. Edge comes with Windows. Without either, it opens in your default browser. Minimizing while you play needs the app window.
-- **A normal user account.** The server runs in your logged-in session and needs no administrator rights. Games need your desktop session to start, which is why Game Hub is not a Windows service.
+- **A normal user account.** No administrator rights are needed, as long as the program folder is one you can write to (anywhere in your user folder; not `Program Files`). The server runs in your logged-in session. Games need your desktop session to start, which is why Game Hub is not a Windows service.
 
 ## Install
 
@@ -30,19 +30,22 @@ Game Hub is a folder of scripts. Installing it means putting that folder somewhe
 
    Alternatively, download `GameHub-<version>.zip` from the [latest release](https://github.com/izored/gamehub/releases/latest) and extract it there. It holds one `GameHub` folder. Each release lists the zip's SHA-256 checksum: `Get-FileHash .\GameHub-<version>.zip` shows yours.
 
-3. **Unblock the scripts** if you downloaded a ZIP. Windows marks downloaded files, and PowerShell may refuse to run marked scripts. Run this from inside the folder:
+3. **Create the shortcuts.** Open the folder, right-click an empty spot and choose **Open in Terminal** (on Windows 10: Shift + right-click, **Open PowerShell window here**), then run:
 
    ```powershell
-   Get-ChildItem -Recurse | Unblock-File
+   powershell -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
    ```
 
-4. **Create the shortcuts:**
+   [`install-shortcuts.ps1`](../install-shortcuts.ps1) is short; read it before you run it if you like. In order, it:
 
-   ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
-   ```
+   1. creates your [data folder](#where-your-data-lives), `%LOCALAPPDATA%\GameHub` ([`lib/paths.ps1`](../lib/paths.ps1)), and copies an older version's data there if there is any;
+   2. removes Windows' *downloaded from the internet* tag from Game Hub's own files, and from nothing else. You don't need to unblock anything yourself: Game Hub starts its scripts with `-ExecutionPolicy Bypass` for that one process anyway;
+   3. makes the three shortcuts below ([`lib/shortcuts.ps1`](../lib/shortcuts.ps1));
+   4. opens Game Hub with [`open-hub.ps1`](../open-hub.ps1), which starts the server (it only answers on `localhost`) and shows the page in a Chrome or Edge app window. Add `-NoOpen` to skip this step.
 
-   This creates three shortcuts with the Game Hub icon, `www\brand\icon.ico` (drawn first if it's missing). They start PowerShell through `conhost.exe --headless`, Windows' own way to run a console program with no window. On Windows 10 versions older than 2004 they use `wscript.exe gamehub.vbs` instead, since VBScript is being phased out of Windows.
+   It needs no administrator rights, downloads nothing and changes nothing else on your PC.
+
+   The shortcuts use the Game Hub icon, `www\brand\icon.ico` (drawn first if it's missing). They start PowerShell through `conhost.exe --headless`, Windows' own way to run a console program with no window. On Windows 10 versions older than 2004 they use `wscript.exe gamehub.vbs` instead, since VBScript is being phased out of Windows.
 
    | Shortcut | Location | What it does |
    |---|---|---|
@@ -104,7 +107,7 @@ Every script takes an optional `-Root <folder>`, the program folder, which defau
 | `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\check-translations.ps1` | Check the [translations](translating.md). |
 | `node tools\test-pad-advice.js` | Check the DS4Windows suggestion rules (needs Node.js). |
 | `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\check-release.ps1` | Run every check, plus a privacy scan of what Git would publish. See [Contributing](../CONTRIBUTING.md#before-you-open-a-pull-request). |
-| `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\make-release.ps1 -Version 1.2.0` | Build a release zip from Git into `dist\`. Add `-Publish` to create the GitHub release too. |
+| `powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\make-release.ps1 -Version 1.2.0 -Title "<headline>"` | Build a release zip from Git into `dist\`, with the notes taken from the changelog. `-NotesOnly` only previews the notes; `-Publish` also creates the GitHub release. See [Releasing](../CONTRIBUTING.md#releasing). |
 
 The server also starts two small background helpers when their option is on: `controller-helper.ps1` (`controllerSummon`, on by default) and `track-games.ps1` (`trackOutsideLaunches`, off by default). Each allows a single copy of itself and stops on its own when its option is turned off.
 
@@ -128,7 +131,7 @@ Your settings and data are in their own [data folder](#where-your-data-lives), s
 git pull
 ```
 
-If you installed from a zip, stop the server (step 1 of [Uninstalling](#uninstalling)), delete the program folder's contents and extract the new version in its place. Unblock the files again.
+If you installed from a zip, stop the server (step 1 of [Uninstalling](#uninstalling)), delete the program folder's contents and extract the new version in its place.
 
 Then restart the server so it loads the new code. Static files (`www\`) are picked up on the next page load. Run `install-shortcuts.ps1` again when the changelog says the shortcuts changed.
 

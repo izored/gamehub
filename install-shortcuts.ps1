@@ -5,13 +5,19 @@
 #   Startup\Game Hub Server.lnk   start the server hidden at logon (single-instance, safe to run twice)
 # The shortcuts start PowerShell without a window through "conhost --headless" (Windows 10 2004+ and 11),
 # or through gamehub.vbs on older Windows (see lib\shortcuts.ps1).
-# Re-running it just refreshes the shortcuts (and moves old VBScript shortcuts to the new way).
+# Then it opens Game Hub (-NoOpen skips that). Re-running it just refreshes the shortcuts (and moves
+# old VBScript shortcuts to the new way).
 # The icon is a brand asset: replace www\brand\icon.ico with your own and re-run this. The default
 # one is drawn below only when that file is missing.
-param([string]$Root = $PSScriptRoot)
+param([string]$Root = $PSScriptRoot, [switch]$NoOpen)
 . (Join-Path $Root 'lib\paths.ps1')
 $Data = Initialize-HubData $Root   # your settings and data, apart from the program (lib\paths.ps1)
 Add-Type -AssemblyName System.Drawing
+
+# Windows tags files that came from the internet. Game Hub starts its scripts with -ExecutionPolicy
+# Bypass, so the tag stops nothing, but the VBScript fallback on older Windows 10 would ask about it
+# each time. Untag Game Hub's own files once; a folder you can't write to is left as it is.
+Get-ChildItem -LiteralPath $Root -Recurse -File -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue
 $cfgPath = Join-Path $Data 'config.json'
 if (-not (Test-Path -LiteralPath $cfgPath)) { $cfgPath = Join-Path $Root 'config.example.json' }   # before the first start
 $port = ([IO.File]::ReadAllText($cfgPath) | ConvertFrom-Json).port
@@ -76,3 +82,10 @@ function New-Shortcut([string]$lnk, [string]$script, [string]$desc) {
 New-Shortcut (Join-Path ([Environment]::GetFolderPath('Desktop')) 'Game Hub.lnk') 'open-hub.ps1' 'Open Game Hub - all installed games in one place'
 New-Shortcut (Join-Path ([Environment]::GetFolderPath('Programs')) 'Game Hub.lnk') 'open-hub.ps1' 'Open Game Hub - all installed games in one place'
 New-Shortcut (Join-Path ([Environment]::GetFolderPath('Startup')) 'Game Hub Server.lnk') 'server.ps1' "Starts the Game Hub local server (http://localhost:$port)"
+
+# done: open Game Hub (its first start shows the setup page)
+if (-not $NoOpen) {
+  $start = Get-HiddenStart $Root 'open-hub.ps1'
+  Start-Process -FilePath $start.Target -ArgumentList $start.Arguments -WorkingDirectory $Root
+  Write-Host 'Opening Game Hub...'
+}

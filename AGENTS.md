@@ -87,7 +87,7 @@ try { Invoke-RestMethod "http://localhost:$port/api/status" -TimeoutSec 3 } catc
 Notes:
 
 - **Where the program is.** Any folder works, even `Program Files`: Game Hub keeps the user's data apart, in `$d`. The usual place for the program is `%LOCALAPPDATA%\Programs\GameHub`. An empty `portable.txt` next to `server.ps1` keeps the data in the program folder instead (a copy on a USB drive).
-- **Downloaded ZIP:** if the files came from a ZIP, unblock them with `Get-ChildItem -Recurse | Unblock-File`.
+- **Downloaded ZIP:** nothing to unblock. The scripts always run with `-ExecutionPolicy Bypass`, and `install-shortcuts.ps1` removes Windows' downloaded-file tag from Game Hub's files. If PowerShell still says scripts are disabled, an organisation's Group Policy blocks them: stop and tell the user, never work around it.
 
 ### Phase 2: Decide what must never be read
 
@@ -134,7 +134,7 @@ From now on, use the [prelude](#prelude) before any command that touches files. 
 Ask whether the user wants Game Hub to **start with Windows**. It runs a small hidden server at logon, which makes the hub open instantly. Then create the shortcuts:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\install-shortcuts.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install-shortcuts.ps1 -NoOpen
 ```
 
 This creates:

@@ -15,7 +15,7 @@ Start with the logs, in `%LOCALAPPDATA%\GameHub\logs` (**Settings › Backups** 
   ```
 
 - **Port in use.** `server.log` then says *Cannot listen on port …*. Pick another `port` in `config.json` (see [Installation › Changing the port](installation.md#changing-the-port)).
-- **Scripts blocked.** If you downloaded a ZIP, run `Get-ChildItem -Recurse | Unblock-File` in the folder.
+- **Scripts blocked.** If PowerShell says *running scripts is disabled on this system* even with `-ExecutionPolicy Bypass`, the execution policy is set by your organisation (Group Policy), which overrides it. Game Hub won't work around that: ask whoever manages the PC. On your own PC, `Get-ChildItem -Recurse | Unblock-File` in the program folder removes Windows' downloaded-file tag, in case a policy of *RemoteSigned* was set by hand.
 - **Antivirus.** Some products block hidden PowerShell windows (`conhost --headless`, or `wscript.exe` on older Windows). Allow the Game Hub folder, or start it with `open-hub.ps1` directly.
 - **The page says *Game Hub is locked*.** See [Game Hub says it is locked](#game-hub-says-it-is-locked).
 
