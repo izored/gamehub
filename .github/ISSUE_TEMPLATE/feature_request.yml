@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an improvement or a new launcher
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe what you're trying to do and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: How could Game Hub handle it? Mock-ups welcome.
+  - type: textarea
+    id: launcher
+    attributes:
+      label: For launcher requests
+      description: Where does the launcher record installed games (files, registry, database)? Does it have a URI scheme to start a game?
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Project rules
+      options:
+        - label: This works without adding dependencies or a build step (see CONTRIBUTING.md)

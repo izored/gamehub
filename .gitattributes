@@ -1,0 +1,16 @@
+* text=auto
+
+# Windows scripts keep CRLF line endings
+*.ps1 text eol=crlf
+*.vbs text eol=crlf
+
+*.ico binary
+*.png binary
+*.jpg binary
+
+# Git hooks run in Git's sh: keep LF
+.githooks/* text eol=lf
+
+# Not part of a release zip (tools/make-release.ps1 uses git archive)
+.github export-ignore
+.githooks export-ignore

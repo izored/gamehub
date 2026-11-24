@@ -1,0 +1,37 @@
+/* Game Hub brand tokens: colours, fonts, corner radius and shadow.
+   Loaded before style.css, which uses these variables everywhere.
+   Keep the UI monochrome: colour comes from game art. Amber and red only mean warning and error. */
+:root {
+  color-scheme: dark;
+
+  /* surfaces, darkest to lightest */
+  --bg: #0e0e0e;
+  --bg-2: #141414;
+  --surface: #181818;
+  --surface-2: #222222;
+  --surface-3: #2c2c2c;
+  --border: #2a2a2a;
+  --border-strong: #3d3d3d;
+
+  /* text */
+  --text: #ffffff;
+  --muted: #a3a3a3;
+  --faint: #6b6b6b;
+
+  /* accent: primary buttons, focus rings, switches */
+  --accent: #ffffff;
+  --accent-soft: rgba(255, 255, 255, 0.14);
+
+  /* meaning only */
+  --warn: #e8b04a;
+  --danger: #e5484d;
+
+  /* shape */
+  --radius: 10px;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+
+  /* type: Windows' own fonts, nothing to download */
+  --font: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --display: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+}

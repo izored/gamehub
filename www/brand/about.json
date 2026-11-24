@@ -1,0 +1,10 @@
+{
+  "_about": "Who made Game Hub, shown in Settings > Made by. A fork swaps these for its own. Links must start with https:// (or mailto: for feedback). make-release.ps1 checks that version matches the release.",
+  "name": "Reda Izo",
+  "role": "Creative Director",
+  "website": "https://dev.izo.red",
+  "repo": "https://github.com/izored/gamehub",
+  "feedback": "mailto:dev@izo.red?subject=%5BGame%20Hub%20Feedback%5D&body=Hi%20Reda%2C%0A%0A",
+  "version": "1.1.0",
+  "license": "MIT"
+}

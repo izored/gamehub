@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Hub</title>
+  <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/brand/brand.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="nav" id="nav">
+    <a class="brand" href="#/" data-i18n-attr="aria-label:nav.home">
+      <img src="/brand/logo.svg" alt="" width="30" height="30">
+      <span>Game Hub</span>
+    </a>
+    <nav class="tabs" id="tabs" data-i18n-attr="aria-label:nav.launchers"></nav>
+    <div class="nav-right">
+      <label class="search" id="searchbox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" data-i18n-attr="placeholder:nav.search,aria-label:nav.searchLabel">
+      </label>
+      <a class="nav-icon" href="#/settings" id="nav-settings" data-i18n-attr="title:nav.settings,aria-label:nav.settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" role="status" hidden></div>
+
+  <!-- home -->
+  <main id="view-home" class="view">
+    <section class="billboard" id="billboard" data-i18n-attr="aria-label:home.featured"></section>
+    <div class="rows" id="rows"></div>
+    <section class="block" id="storage-block">
+      <h2 class="row-title" data-i18n="home.storage">Storage</h2>
+      <div class="drives" id="drives"></div>
+    </section>
+    <section class="block cleanup" id="cleanup" hidden>
+      <details>
+        <summary><span id="cleanup-title">Cleanup</span><span class="muted" id="cleanup-sub"></span></summary>
+        <p class="muted cleanup-intro" data-i18n="home.cleanupIntro">Duplicate installs and leftovers found during the scan. Nothing here is deleted automatically: open the folder, check, then remove it yourself or through the launcher's uninstall.</p>
+        <ul id="cleanup-list"></ul>
+      </details>
+    </section>
+  </main>
+
+  <!-- filtered grid: launcher, drive or search -->
+  <main id="view-grid" class="view page" hidden>
+    <div class="grid-head">
+      <h1 class="page-title" id="grid-title"></h1>
+      <label class="sort"><span data-i18n="grid.sortBy">Sort by</span>
+        <select id="grid-sort">
+          <option value="name" data-i18n="grid.sortName">Name</option>
+          <option value="played" data-i18n="grid.sortPlayed">Most played</option>
+          <option value="recent" data-i18n="grid.sortRecent">Recently played</option>
+          <option value="added" data-i18n="grid.sortAdded">Recently added</option>
+          <option value="size" data-i18n="grid.sortSize">Size</option>
+        </select>
+      </label>
+    </div>
+    <div class="poster-grid" id="grid"></div>
+    <p class="empty" id="empty" hidden data-i18n="grid.empty">No game matches. Press Esc to clear the search.</p>
+  </main>
+
+  <!-- first-run setup -->
+  <main id="view-setup" class="view page setup" hidden>
+    <h1 class="page-title" data-i18n="setup.title">Welcome to Game Hub</h1>
+    <p class="setup-intro" data-i18n="setup.intro">Three quick steps before Game Hub looks for your games. Nothing is scanned until you click Scan.</p>
+    <ol class="steps" id="setup-steps">
+      <li data-step="1" data-i18n="setup.step1">Drives</li>
+      <li data-step="2" data-i18n="setup.step2">Game folders</li>
+      <li data-step="3" data-i18n="setup.step3">Options</li>
+    </ol>
+
+    <section class="card setup-step" id="setup-1">
+      <h2 data-i18n="setup.drivesTitle">Which drives should Game Hub never read?</h2>
+      <p class="set-desc" data-i18n="setup.drivesDesc">Tick removable or private drives: a USB SSD, a backup disk, a drive you share. USB drives are ticked for you, even the ones Windows calls fixed. Game Hub only looks at each drive's name and size here.</p>
+      <ul class="drive-pick" id="setup-drives"></ul>
+      <div class="set-foot"><span></span><button class="btn primary" type="button" id="setup-next-1" data-i18n="common.next">Next</button></div>
+    </section>
+
+    <section class="card setup-step" id="setup-2" hidden>
+      <h2 data-i18n="setup.foldersTitle">Where are your games?</h2>
+      <p class="set-desc" data-i18n="setup.launchersDesc">Found automatically through their launchers, no need to add them:</p>
+      <ul class="folder-list compact" id="setup-launchers"></ul>
+      <p class="set-desc" data-i18n="setup.foldersDesc">Folders with other games (every sub-folder counts as one game). Untick anything that isn't a game folder.</p>
+      <ul class="folder-list check" id="setup-folders"></ul>
+      <div class="setup-actions">
+        <button class="btn" type="button" id="setup-add-folder" data-i18n="settings.addFolder">Add folder...</button>
+        <button class="btn" type="button" id="setup-ai" data-i18n="ai.open">Find my game folders with an AI</button>
+      </div>
+      <div class="set-foot"><button class="btn ghost" type="button" id="setup-back-2" data-i18n="common.back">Back</button><button class="btn primary" type="button" id="setup-next-2" data-i18n="common.next">Next</button></div>
+    </section>
+
+    <section class="card setup-step" id="setup-3" hidden>
+      <h2 data-i18n="setup.optionsTitle">A few options</h2>
+      <label class="set-row toggle-row"><div><div class="set-label" data-i18n="settings.startup">Start Game Hub with Windows</div><div class="set-desc" data-i18n="settings.startupDesc">Runs the small local server in the background so the hub opens instantly.</div></div><input type="checkbox" class="switch" id="setup-startup" checked></label>
+      <label class="set-row toggle-row"><div><div class="set-label" data-i18n="settings.minimize">Minimize Game Hub when a game starts</div><div class="set-desc" data-i18n="settings.minimizeDesc">As soon as the game's window opens, Game Hub steps aside so your mouse, keyboard and controller go straight to the game.</div></div><input type="checkbox" class="switch" id="setup-minimize" checked></label>
+      <label class="set-row toggle-row"><div><div class="set-label" data-i18n="settings.restore">Bring Game Hub back when you quit</div><div class="set-desc" data-i18n="settings.restoreDesc">When the game has fully closed, Game Hub returns to the front.</div></div><input type="checkbox" class="switch" id="setup-restore" checked></label>
+      <label class="set-row toggle-row" id="setup-lock-row" hidden><div><div class="set-label" data-i18n="settings.lock">Lock Game Hub to my Windows account</div><div class="set-desc" data-i18n="settings.lockDesc">This PC has other user accounts. When locked, only your account can use Game Hub; others see the page but can't launch or change anything.</div></div><input type="checkbox" class="switch" id="setup-lock"></label>
+      <div class="set-row"><div><div class="set-label" data-i18n="settings.language">Language</div></div><select id="setup-language" class="select"></select></div>
+      <div class="set-foot"><button class="btn ghost" type="button" id="setup-back-3" data-i18n="common.back">Back</button><button class="btn primary" type="button" id="setup-scan" data-i18n="setup.scan">Scan my games</button></div>
+    </section>
+  </main>
+
+  <!-- settings -->
+  <main id="view-settings" class="view page" hidden>
+    <h1 class="page-title" data-i18n="settings.title">Settings</h1>
+    <div class="settings">
+      <section class="card">
+        <h2 data-i18n="settings.library">Library</h2>
+        <div class="set-row">
+          <div><div class="set-label" data-i18n="settings.scan">Scan for games</div><div class="set-desc" id="set-scan"></div></div>
+          <button class="btn" type="button" id="btn-rescan" data-i18n="settings.rescan">Rescan now</button>
+        </div>
+        <div class="set-row">
+          <div><div class="set-label" data-i18n="settings.addGame">Add a game</div><div class="set-desc" data-i18n="settings.addGameDesc">For anything the scan missed: pick its executable and it joins the hub.</div></div>
+          <button class="btn primary" type="button" id="btn-add" data-i18n="settings.addGame">Add a game</button>
+        </div>
+        <div class="set-row">
+          <div><div class="set-label" data-i18n="settings.covers">Cover art</div><div class="set-desc" id="set-covers"></div></div>
+          <button class="btn" type="button" id="btn-covers" data-i18n="settings.fetchCovers">Fetch missing covers</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.folders">Game folders</h2>
+        <p class="set-desc" data-i18n="settings.foldersDesc">Every sub-folder of these is checked for a game. Steam, Epic, EA, Ubisoft, GOG, Battle.net, Riot, Amazon, Rockstar and Xbox app games are found through their launchers wherever they are installed. Add folders for everything else.</p>
+        <ul class="folder-list" id="folders"></ul>
+        <div class="set-foot">
+          <span class="set-desc"></span>
+          <span class="btn-row"><button class="btn" type="button" id="btn-ai-folders" data-i18n="ai.open">Find my game folders with an AI</button><button class="btn" type="button" id="btn-add-folder" data-i18n="settings.addFolder">Add folder...</button></span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.drives">Drives</h2>
+        <p class="set-desc" data-i18n="settings.drivesDesc">Drives marked "Never read" are never scanned, and their games, folders and executables are refused. Only fixed disks are scanned at all.</p>
+        <ul class="drive-pick" id="set-drives"></ul>
+        <div class="set-foot"><span class="set-desc" id="set-drives-note"></span><button class="btn" type="button" id="btn-save-drives" data-i18n="settings.saveDrives">Save and rescan</button></div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.hidden">Hidden games</h2>
+        <ul class="folder-list" id="hidden-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.whilePlay">While you play</h2>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.minimize">Minimize Game Hub when a game starts</div><div class="set-desc" data-i18n="settings.minimizeDesc">As soon as the game's window opens, Game Hub steps aside so your mouse, keyboard and controller go straight to the game.</div></div>
+          <input type="checkbox" class="switch" id="set-minimize">
+        </label>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.restore">Bring Game Hub back when you quit</div><div class="set-desc" data-i18n="settings.restoreDesc">When the game has fully closed, Game Hub returns to the front.</div></div>
+          <input type="checkbox" class="switch" id="set-restore">
+        </label>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.trackOutside">Count games started outside Game Hub</div><div class="set-desc" data-i18n="settings.trackOutsideDesc">Play time is always counted for games you start from Game Hub. With this on, games started from Steam, a desktop shortcut or anywhere else are counted too (a light check once a minute).</div></div>
+          <input type="checkbox" class="switch" id="set-track">
+        </label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.controllers">Controllers</h2>
+        <p class="set-desc" data-i18n="settings.controllersDesc">DualSense, DualShock 4 (also through DS4Windows) and Xbox controllers work in Game Hub: D-pad to move, Cross / A to play, Circle / B to go back, Triangle / Y for Favorites, Square / X to edit, L1 / R1 to switch tabs, Share / View to search.</p>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.summon">Bring Game Hub back with the controller</div><div class="set-desc" data-i18n="settings.summonDesc">Hold View + Menu (Share + Options through DS4Windows) for 1.5 seconds, anywhere in Windows. Works with Xbox controllers and anything that appears as one.</div></div>
+          <input type="checkbox" class="switch" id="set-summon">
+        </label>
+        <div class="set-note">
+          <div class="set-label" data-i18n="settings.steamInputTitle">Controller not working in a Steam game?</div>
+          <p class="set-desc" data-i18n="settings.steamInputDesc">Steam decides how each game sees your controller, and Steam Input can be switched off for a single game. In Steam, open the game's controller settings (Library > right-click the game > Properties > Controller, or the controller icon while it runs) and turn Steam Input on for that game. If you use DS4Windows instead, leave Steam Input off for that game so it doesn't see two controllers.</p>
+        </div>
+        <div class="ds4" id="ds4-block" hidden>
+          <div class="set-label" data-i18n="ds4.title">DS4Windows: per-game rules</div>
+          <p class="set-desc" data-i18n="ds4.desc">Choose what DS4Windows does while each game runs. "Turn off" lets the game or Steam Input see your real PlayStation controller; DS4Windows comes back when you leave the game. Game Hub writes the rules into DS4Windows and restarts it.</p>
+          <div class="set-label sub" data-i18n="ds4.pads">Your PlayStation controllers</div>
+          <div class="pads" id="ds4-pads"></div>
+          <p class="set-desc ds4-tip" id="ds4-tip" hidden></p>
+          <div class="set-foot ds4-check"><span class="set-desc" id="ds4-check-status"></span><button class="btn" type="button" id="btn-ds4-check" data-i18n="ds4.check">Check my games</button><button class="btn" type="button" id="btn-ds4-suggest" data-i18n="ds4.useSuggestions">Use the suggestions</button></div>
+          <p class="set-desc muted" data-i18n="ds4.checkPrivacy">Check my games looks up each game on PCGamingWiki and Steam to see which controllers it understands by itself. Only game names are sent.</p>
+          <div class="ds4-table" id="ds4-table"></div>
+          <div class="set-foot"><span class="set-desc" id="ds4-status"></span><button class="btn primary" type="button" id="btn-ds4-apply" data-i18n="ds4.apply">Apply to DS4Windows</button></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.language">Language</h2>
+        <div class="set-row">
+          <div><div class="set-desc" id="set-language-note"></div></div>
+          <select id="set-language" class="select"></select>
+        </div>
+      </section>
+
+      <section class="card" id="security-card" hidden>
+        <h2 data-i18n="settings.security">Security</h2>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.lock">Lock Game Hub to my Windows account</div><div class="set-desc" data-i18n="settings.lockDesc">This PC has other user accounts. When locked, only your account can use Game Hub; others see the page but can't launch or change anything.</div></div>
+          <input type="checkbox" class="switch" id="set-lock">
+        </label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="backups.title">Backups</h2>
+        <p class="set-desc" data-i18n="backups.desc">Game Hub saves a copy of your settings, game list, fixes, favorites, play time and custom covers once a day when something changed. Game files are not included.</p>
+        <p class="set-desc" id="data-folder"></p>
+        <ul class="folder-list" id="backup-list"></ul>
+        <div class="set-row">
+          <div><div class="set-label" data-i18n="backups.copyTo">Also copy backups to</div><div class="set-desc" id="backup-copy-to"></div></div>
+          <span class="btn-row"><button class="link" type="button" id="btn-backup-copy-clear" data-i18n="common.remove" hidden>Remove</button><button class="btn" type="button" id="btn-backup-copy" data-i18n="backups.choose">Choose folder...</button></span>
+        </div>
+        <div class="set-foot">
+          <a class="btn ghost" href="/export/my-games.csv" download id="btn-export" data-i18n="backups.export">Download my games list (CSV)</a>
+          <button class="btn" type="button" id="btn-backup-now" data-i18n="backups.now">Back up now</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="settings.startupTitle">Startup</h2>
+        <label class="set-row toggle-row">
+          <div><div class="set-label" data-i18n="settings.startup">Start Game Hub with Windows</div><div class="set-desc" data-i18n="settings.startupDesc">Runs the small local server in the background so the hub opens instantly.</div></div>
+          <input type="checkbox" class="switch" id="set-startup">
+        </label>
+      </section>
+      <!-- who made Game Hub: filled from www/brand/about.json -->
+      <section class="card about-card" id="about-card">
+        <h2 data-i18n="about.title">Made by</h2>
+        <div class="about-name" id="about-name"></div>
+        <div class="about-role" id="about-role"></div>
+        <p class="set-desc about-bio" data-i18n="about.bio">I build tools I want to use. Game Hub keeps every game on your PC in one place. On your machine.</p>
+        <div class="btn-row about-links" id="about-links"></div>
+        <div class="about-support">
+          <p class="set-desc" data-i18n="about.starHint">Game Hub is free and open source. If it's useful to you, a star on GitHub helps other people find it.</p>
+          <div class="btn-row" id="about-actions"></div>
+        </div>
+        <p class="set-desc about-version" id="about-version"></p>
+      </section>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <!-- shown when Game Hub is locked to another Windows account -->
+  <div class="locked" id="locked" hidden>
+    <div class="locked-box">
+      <img src="/brand/logo.svg" alt="" width="48" height="48">
+      <h1 data-i18n="lock.title">Game Hub is locked</h1>
+      <p data-i18n="lock.body">It's locked to another Windows account on this PC. If it's yours, open Game Hub from its Desktop or Start menu shortcut.</p>
+    </div>
+  </div>
+
+  <!-- edit dialog (pen icon) -->
+  <dialog class="modal" id="edit" aria-labelledby="edit-title">
+    <form method="dialog" class="modal-body" id="edit-form">
+      <div class="edit-cover">
+        <div class="drop" id="edit-drop" data-i18n-attr="title:edit.dropHint">
+          <div class="poster-art" id="edit-preview"></div>
+          <div class="drop-hint" data-i18n="edit.dropImage">Drop image</div>
+        </div>
+        <button class="btn wide" type="button" id="edit-steam" data-i18n="edit.steamArt">Search Steam artwork</button>
+        <button class="btn wide" type="button" id="edit-upload" data-i18n="edit.uploadCover">Upload cover...</button>
+        <button class="btn wide ghost" type="button" id="edit-upload-hero" data-i18n="edit.uploadHero">Upload background...</button>
+        <button class="link" type="button" id="edit-reset-cover" hidden data-i18n="edit.resetCover">Remove custom cover</button>
+        <button class="link" type="button" id="edit-reset-hero" hidden data-i18n="edit.resetHero">Remove custom background</button>
+      </div>
+      <div class="edit-fields">
+        <h2 id="edit-title">Edit game</h2>
+        <label class="field"><span data-i18n="edit.name">Name</span><input id="edit-name" required></label>
+        <div class="field">
+          <span data-i18n="edit.exe">Executable</span>
+          <div class="input-row"><input id="edit-exe" spellcheck="false" placeholder="C:\Games\MyGame\MyGame.exe"><button class="btn" type="button" id="edit-browse" data-i18n="common.browse">Browse...</button></div>
+          <p class="hint" id="edit-launch-hint"></p>
+        </div>
+        <label class="field"><span><span data-i18n="edit.args">Launch arguments</span> <em data-i18n="common.optional">optional</em></span><input id="edit-args" spellcheck="false" placeholder="-windowed"></label>
+        <label class="field" id="edit-ds4-field" hidden><span data-i18n="ds4.field">DS4Windows while this game runs</span><select id="edit-ds4" class="select wide"></select><span class="hint" id="edit-ds4-why"></span></label>
+        <div class="field"><span data-i18n="edit.folder">Install folder</span><p class="path" id="edit-dir"></p></div>
+        <p class="hint warn" id="edit-warning" hidden></p>
+
+        <div class="steam-pick" id="steam-pick" hidden>
+          <div class="input-row"><input id="steam-q" data-i18n-attr="placeholder:edit.searchSteam"><button class="btn" type="button" id="steam-go" data-i18n="common.search">Search</button></div>
+          <div class="steam-results" id="steam-results"></div>
+        </div>
+
+        <div class="modal-foot">
+          <button class="link danger" type="button" id="edit-hide" data-i18n="edit.hide">Hide from hub</button>
+          <span class="grow"></span>
+          <button class="btn" value="cancel" formnovalidate data-i18n="common.cancel">Cancel</button>
+          <button class="btn primary" type="button" id="edit-save" data-i18n="common.save">Save</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- add game dialog -->
+  <dialog class="modal narrow" id="add" aria-labelledby="add-title">
+    <form method="dialog" class="modal-body single" id="add-form">
+      <h2 id="add-title" data-i18n="settings.addGame">Add a game</h2>
+      <div class="field">
+        <span data-i18n="edit.exe">Executable</span>
+        <div class="input-row"><input id="add-exe" spellcheck="false" placeholder="C:\Games\MyGame\MyGame.exe"><button class="btn" type="button" id="add-browse" data-i18n="common.browse">Browse...</button></div>
+      </div>
+      <label class="field"><span data-i18n="edit.name">Name</span><input id="add-name" data-i18n-attr="placeholder:add.namePlaceholder"></label>
+      <label class="field"><span><span data-i18n="edit.args">Launch arguments</span> <em data-i18n="common.optional">optional</em></span><input id="add-args" spellcheck="false"></label>
+      <p class="hint" data-i18n="add.hint">The hub looks up its cover automatically; you can change it later with the pen icon.</p>
+      <div class="modal-foot">
+        <span class="grow"></span>
+        <button class="btn" value="cancel" formnovalidate data-i18n="common.cancel">Cancel</button>
+        <button class="btn primary" type="button" id="add-save" data-i18n="add.save">Add game</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- find game folders with an AI -->
+  <dialog class="modal" id="ai" aria-labelledby="ai-title">
+    <form method="dialog" class="modal-body single" id="ai-form">
+      <h2 id="ai-title" data-i18n="ai.title">Find your game folders with an AI</h2>
+      <p class="hint" data-i18n="ai.step1">1. Copy this prompt and give it to the AI you use. An AI that can run commands on this PC (Claude Code, Codex, Copilot...) looks by itself; a chat AI (ChatGPT, Claude...) gives you one command to run and asks for its output.</p>
+      <textarea id="ai-prompt" class="code" rows="9" readonly></textarea>
+      <div class="input-row end"><button class="btn" type="button" id="ai-copy" data-i18n="ai.copy">Copy prompt</button></div>
+      <p class="hint" data-i18n="ai.step2">2. Paste the AI's answer here (its list of folders):</p>
+      <textarea id="ai-answer" class="code" rows="6" spellcheck="false" data-i18n-attr="placeholder:ai.answerPlaceholder"></textarea>
+      <div class="input-row end"><button class="btn" type="button" id="ai-check" data-i18n="ai.check">Check folders</button></div>
+      <ul class="folder-list check" id="ai-results"></ul>
+      <p class="hint muted" data-i18n="ai.privacy">Privacy: the AI provider sees your folder names, nothing else. Drives you chose never to read are named in the prompt so the AI stays away from them.</p>
+      <div class="modal-foot">
+        <span class="grow"></span>
+        <button class="btn" value="cancel" formnovalidate data-i18n="common.cancel">Cancel</button>
+        <button class="btn primary" type="button" id="ai-add" disabled data-i18n="ai.add">Add selected folders</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- after playing: how did the controller work? -->
+  <dialog class="modal narrow" id="pad-ask" aria-labelledby="pad-ask-title">
+    <form method="dialog" class="modal-body single">
+      <h2 id="pad-ask-title">How did your controller work?</h2>
+      <div id="pad-ask-q">
+        <p class="hint" data-i18n="ask.desc">Your answer helps Game Hub choose what DS4Windows does while this game runs.</p>
+        <div class="ask-btns" id="pad-ask-btns">
+          <button class="btn" type="button" data-answer="fine" data-i18n="ask.fine">It worked fine</button>
+          <button class="btn" type="button" data-answer="double" data-i18n="ask.double">Buttons pressed twice</button>
+          <button class="btn" type="button" data-answer="none" data-i18n="ask.none">It didn't respond</button>
+        </div>
+        <div class="ask-btns" id="pad-tell-btns" hidden>
+          <button class="btn" type="button" data-answer="fine" data-rule="off" data-i18n="ask.tellOff">It works with DS4Windows off</button>
+          <button class="btn" type="button" data-answer="none" data-rule="off" data-i18n="ask.tellOn">It works only with DS4Windows on</button>
+          <button class="btn" type="button" data-answer="double" data-rule="on" data-i18n="ask.tellDouble">Buttons press twice with DS4Windows on</button>
+        </div>
+      </div>
+      <p class="hint" id="pad-ask-offer" hidden></p>
+      <div class="modal-foot">
+        <button class="link" type="button" data-answer="skip" id="pad-ask-skip" data-i18n="ask.noPad">I didn't use a controller</button>
+        <span class="grow"></span>
+        <button class="btn" value="cancel" formnovalidate data-i18n="ask.later">Not now</button>
+        <button class="btn primary" type="button" id="pad-ask-apply" hidden data-i18n="ask.apply">Yes, apply</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/pad-advice.js"></script>
+  <script src="/app.js"></script>
+  <script src="/gamepad.js"></script>
+</body>
+</html>

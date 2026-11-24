@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Troubleshooting guide
+    url: https://github.com/izored/gamehub/blob/main/docs/troubleshooting.md
+    about: Common problems (missing games, wrong covers, server won't start) and where the logs are.

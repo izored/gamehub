@@ -1,0 +1,23 @@
+{
+  "port": 8790,
+  "language": "auto",
+  "excludeDriveLetters": [],
+  "excludeVolumeLabels": [],
+  "gameRoots": [
+    "C:\\Games"
+  ],
+  "discoverRoots": [
+    "C:\\Program Files",
+    "C:\\Program Files (x86)"
+  ],
+  "ignore": [
+    "C:\\Program Files\\Epic Games\\Launcher"
+  ],
+  "newDays": 14,
+  "minimizeOnLaunch": true,
+  "restoreAfterGame": true,
+  "trackOutsideLaunches": false,
+  "controllerSummon": true,
+  "lockToAccount": false,
+  "backupCopyTo": ""
+}

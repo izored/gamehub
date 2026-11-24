@@ -1,0 +1,80 @@
+name: Bug report
+description: Something doesn't work as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check [Troubleshooting](../blob/main/docs/troubleshooting.md) first.
+        **Security issue?** Don't file it here, see [SECURITY.md](../blob/main/SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Settings
+        2. Click "Add folder..."
+        3. ...
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Setup page / finding game folders
+        - Scanning / a game is missing or wrong
+        - Launching
+        - Play time
+        - Artwork
+        - Interface
+        - Controller / DS4Windows
+        - Backups
+        - Language / translation
+        - Settings / configuration
+        - Install / startup
+  - type: dropdown
+    id: launcher
+    attributes:
+      label: Launcher involved
+      multiple: true
+      options:
+        - Steam
+        - Epic Games
+        - EA app / Origin
+        - Ubisoft Connect
+        - GOG Galaxy
+        - Battle.net
+        - Riot Client
+        - Amazon Games
+        - Rockstar Games Launcher
+        - Xbox app / Game Pass
+        - Standalone / other
+        - Not launcher-specific
+  - type: input
+    id: version
+    attributes:
+      label: Game Hub version
+      description: Release tag or commit (see CHANGELOG.md)
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant lines from logs/server.log or logs/scan.log. Remove anything you consider private (paths, game names).
+      render: text

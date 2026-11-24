@@ -1,0 +1,25 @@
+# Your machine's settings and library: personal, never commit
+config.json
+overrides.json
+*.bak
+
+# Generated at runtime: game catalog, favorites, play history, downloaded artwork, logs
+data/
+logs/
+*.tmp
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# Where the shortcut icon lived before www/brand/icon.ico: shortcuts made then still point at it
+/gamehub.ico
+
+# Left in the program folder after its data moved to %LOCALAPPDATA%\GameHub (names your user folder)
+DATA-MOVED.txt
+# Marks a portable copy whose data stays next to the scripts (lib/paths.ps1)
+portable.txt
+# Release zips built by tools/make-release.ps1
+dist/

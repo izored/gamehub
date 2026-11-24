@@ -1,0 +1,27 @@
+{
+  "_help": "Copy to overrides.json (optional). Manual fixes applied on every scan; see docs/configuration.md. Game ids are listed in data\\games.json.",
+  "games": {
+    "epic-mygame": { "name": "My Game: Definitive Edition" },
+    "other-somegame": { "exe": "bin\\SomeGame.exe", "args": "-windowed -nosplash" },
+    "other-oldgame": { "warning": "Needs the controller plugged in before launch." },
+    "epic-rocketleague": { "steamAppId": 252950 },
+    "other-minecraft-bedrock-edition": { "msStoreId": "9NBLGGH2JHXJ" },
+    "other-tool": { "hidden": true, "name": "Some Tool" },
+    "other-nocover": { "noArt": true },
+    "steam-1234560": {
+      "duplicateOf": "other-mygame",
+      "note": "Second copy installed through Steam; the D: copy is the one in use."
+    }
+  },
+  "add": [
+    { "id": "manual-retro-game", "name": "Retro Game", "dir": "D:\\Emulators\\RetroGame", "exe": "RetroGame.exe", "args": "--fullscreen", "source": "other" }
+  ],
+  "cleanup": [
+    {
+      "path": "C:\\Program Files\\Epic Games\\OldDownload",
+      "title": "Abandoned download",
+      "keep": "D:\\Games\\MyGame",
+      "note": "Partial re-download that never finished."
+    }
+  ]
+}

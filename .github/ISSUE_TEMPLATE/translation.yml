@@ -1,0 +1,59 @@
+name: Wrong or missing translation
+description: Text in Game Hub that is translated wrongly, sounds odd, or is still in English
+labels: [translation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping! Game Hub's languages other than English were translated by an AI, so corrections from people who speak the language are very welcome.
+        Comfortable editing a file? You can also fix it yourself in a pull request: see [Translating Game Hub](../blob/main/docs/translating.md).
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Français
+        - Español
+        - Português (Brasil)
+        - Deutsch
+        - Русский
+        - 简体中文
+        - 日本語
+        - 한국어
+        - Polski
+        - Türkçe
+        - English
+        - Another language (say which below)
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where in Game Hub?
+      description: The page, section or button where you saw the text.
+      placeholder: Settings › Backups, the "Restore" button
+    validations:
+      required: true
+  - type: textarea
+    id: now
+    attributes:
+      label: What it says now
+    validations:
+      required: true
+  - type: textarea
+    id: better
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why (optional)
+      description: Wrong meaning, too formal, cut off, a better-known word...
+  - type: checkboxes
+    id: speaker
+    attributes:
+      label: About you
+      options:
+        - label: I am a native or fluent speaker of this language

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Game Hub: checks and privacy scan before every commit (tools/check-release.ps1).
+# Turn it on once per clone:  git config core.hooksPath .githooks
+exec powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/check-release.ps1 -Staged

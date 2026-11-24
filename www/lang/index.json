@@ -1,0 +1,15 @@
+{
+  "languages": [
+    { "code": "en", "name": "English" },
+    { "code": "fr", "name": "Français", "machine": true },
+    { "code": "es", "name": "Español", "machine": true },
+    { "code": "pt-BR", "name": "Português (Brasil)", "machine": true },
+    { "code": "de", "name": "Deutsch", "machine": true },
+    { "code": "ru", "name": "Русский", "machine": true },
+    { "code": "zh-Hans", "name": "简体中文", "machine": true },
+    { "code": "ja", "name": "日本語", "machine": true },
+    { "code": "ko", "name": "한국어", "machine": true },
+    { "code": "pl", "name": "Polski", "machine": true },
+    { "code": "tr", "name": "Türkçe", "machine": true }
+  ]
+}
