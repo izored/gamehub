@@ -1,4 +1,4 @@
-![Game Hub](www/brand/banner.svg)
+![Game Hub: the home page, with a featured game on the billboard and the Favorites row](docs/images/home.jpg)
 
 # Game Hub
 
@@ -10,8 +10,6 @@ It runs entirely on your machine: a small PowerShell server and a web page at `h
 ![Windows PowerShell 5.1](https://img.shields.io/badge/PowerShell-5.1-0e0e0e)
 ![No dependencies](https://img.shields.io/badge/dependencies-none-0e0e0e)
 ![License: MIT](https://img.shields.io/badge/license-MIT-0e0e0e)
-
-![Game Hub home page: featured game, Favorites row with 16:9 cards](docs/images/home.jpg)
 
 ## Why
 
