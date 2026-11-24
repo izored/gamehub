@@ -184,6 +184,7 @@
   "about.bug": "Relatar um problema",
   "about.version": "Versão {version}",
   "about.license": "Licença {license}",
+  "about.disclaimer": "Fornecido como está, sem nenhuma garantia: você usa o Game Hub por sua conta e risco. Faça seus próprios backups do que importa, a começar pelos saves dos jogos.",
 
   "lang.auto": "Automático ({name})",
   "lang.aiNote": "Esta tradução foi escrita por uma IA e pode ter erros.",

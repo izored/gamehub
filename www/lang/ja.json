@@ -182,6 +182,7 @@
   "about.bug": "問題を報告",
   "about.version": "バージョン {version}",
   "about.license": "{license} ライセンス",
+  "about.disclaimer": "Game Hub は現状のまま、一切の保証なしで提供されます。ご利用は自己責任でお願いします。大切なもの、特にセーブデータは自分でバックアップしてください。",
 
   "lang.auto": "自動（{name}）",
   "lang.aiNote": "この翻訳は AI によるもので、誤りがある可能性があります。",

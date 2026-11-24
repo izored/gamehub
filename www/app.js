@@ -663,7 +663,9 @@ function renderAbout() {
   $('#about-links').replaceChildren(...[site && out(new URL(site).host, site, I.globe, 'btn small ghost'), out('GitHub', REPO, I.code, 'btn small ghost')].filter(Boolean));
   $('#about-actions').replaceChildren(...[out(t('about.star'), REPO, I.star, 'btn small primary'),
     out(t('about.feedback'), safeHref(a.feedback, 'https:', 'mailto:'), I.message), out(t('about.bug'), `${REPO}/issues/new/choose`, I.warn)].filter(Boolean));
-  $('#about-version').textContent = [a.version && t('about.version', { version: a.version }), a.license && t('about.license', { license: a.license })].filter(Boolean).join(' · ');
+  // the version, then the license, linked to its full text
+  const lic = a.license && h('a', { href: `${REPO}/blob/main/LICENSE`, target: '_blank', rel: 'noopener noreferrer' }, t('about.license', { license: a.license }));
+  $('#about-version').replaceChildren(...[a.version && t('about.version', { version: a.version }), a.version && lic && ' · ', lic].filter(Boolean));
 }
 
 function renderLangNote() {

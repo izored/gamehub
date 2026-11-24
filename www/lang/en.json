@@ -184,6 +184,7 @@
   "about.bug": "Report a problem",
   "about.version": "Version {version}",
   "about.license": "{license} license",
+  "about.disclaimer": "Provided as is, without any warranty: you use Game Hub at your own risk. Keep your own backups of what matters, game saves first.",
 
   "lang.auto": "Automatic ({name})",
   "lang.aiNote": "This translation was written by an AI and may have mistakes.",

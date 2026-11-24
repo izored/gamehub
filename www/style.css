@@ -234,6 +234,8 @@ footer { padding: 30px var(--gutter) 34px; color: var(--faint); font-size: 12px;
 .about-support { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .about-support .btn-row { margin-top: 12px; }
 .about-version { margin-top: 14px; color: var(--faint); }
+.about-version a { color: inherit; }
+.about-disclaimer { margin-top: 4px; color: var(--faint); font-size: 12px; max-width: 62ch; }
 .set-note { margin-top: 14px; padding: 12px 14px; border-radius: 9px; background: var(--bg-2); border: 1px solid var(--border); }
 .set-note .set-desc strong { color: var(--text); }
 .folder-list { list-style: none; margin: 12px 0 0; padding: 0; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }

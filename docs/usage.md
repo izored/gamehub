@@ -221,7 +221,7 @@ The **⚙** icon at the top right opens Settings.
 | **Security** | Only on a PC with other Windows accounts: **Lock Game Hub to my Windows account**. See [SECURITY.md](../SECURITY.md#optional-lock-to-your-windows-account). |
 | **Backups** | Your Game Hub backups with **Restore**, **Back up now**, a second folder to copy backups to, and **Download my games list (CSV)**. It also shows your [data folder](installation.md#where-your-data-lives). See [Backups](#backups). |
 | **Startup** | Start the server with Windows. This toggles the Startup-folder shortcut. |
-| **Made by** | Who made Game Hub, with links to their website and the GitHub project, **Star on GitHub**, **Give feedback**, **Report a problem**, and the version. The details come from [`www/brand/about.json`](../www/brand/README.md). |
+| **Made by** | Who made Game Hub, with links to their website and the GitHub project, **Star on GitHub**, **Give feedback**, **Report a problem**, the version and license, and a short disclaimer (provided as is, use at your own risk). The details come from [`www/brand/about.json`](../www/brand/README.md). |
 
 Steam, Epic, Ubisoft, GOG, Battle.net, Riot, Amazon, Rockstar and Xbox app games are found through their launchers wherever they are installed. So are most EA games, through their Windows uninstall entries. Add a game folder for everything else, including games a launcher forgot (the setup page suggests the launchers' own folders for that). See [Launchers](launchers.md).
 

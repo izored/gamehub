@@ -182,6 +182,7 @@
   "about.bug": "报告问题",
   "about.version": "版本 {version}",
   "about.license": "{license} 许可证",
+  "about.disclaimer": "按原样提供，不含任何担保：使用 Game Hub 的风险由你自行承担。请自行备份重要内容，尤其是游戏存档。",
 
   "lang.auto": "自动（{name}）",
   "lang.aiNote": "此翻译由 AI 完成，可能有错误。",

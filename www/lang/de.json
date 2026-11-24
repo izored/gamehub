@@ -184,6 +184,7 @@
   "about.bug": "Problem melden",
   "about.version": "Version {version}",
   "about.license": "{license}-Lizenz",
+  "about.disclaimer": "Ohne jede Gewähr bereitgestellt: Du nutzt Game Hub auf eigenes Risiko. Sichere selbst, was dir wichtig ist, vor allem deine Spielstände.",
 
   "lang.auto": "Automatisch ({name})",
   "lang.aiNote": "Diese Übersetzung wurde von einer KI geschrieben und kann Fehler enthalten.",

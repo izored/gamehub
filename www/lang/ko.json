@@ -182,6 +182,7 @@
   "about.bug": "문제 신고",
   "about.version": "버전 {version}",
   "about.license": "{license} 라이선스",
+  "about.disclaimer": "Game Hub는 있는 그대로, 어떠한 보증도 없이 제공됩니다. 사용에 따른 책임은 본인에게 있습니다. 중요한 것, 특히 게임 저장 파일은 직접 백업해 두세요.",
 
   "lang.auto": "자동({name})",
   "lang.aiNote": "이 번역은 AI가 작성했으며 오류가 있을 수 있습니다.",

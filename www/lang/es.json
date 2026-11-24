@@ -184,6 +184,7 @@
   "about.bug": "Informar de un problema",
   "about.version": "Versión {version}",
   "about.license": "Licencia {license}",
+  "about.disclaimer": "Se ofrece tal cual, sin ninguna garantía: usas Game Hub bajo tu propia responsabilidad. Haz tus propias copias de lo que importa, empezando por tus partidas guardadas.",
 
   "lang.auto": "Automático ({name})",
   "lang.aiNote": "Esta traducción la escribió una IA y puede tener errores.",

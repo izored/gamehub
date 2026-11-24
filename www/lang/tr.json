@@ -184,6 +184,7 @@
   "about.bug": "Sorun bildir",
   "about.version": "Sürüm {version}",
   "about.license": "{license} lisansı",
+  "about.disclaimer": "Olduğu gibi, hiçbir garanti olmadan sunulur: Game Hub'ı kullanmak kendi sorumluluğundadır. Önemli olanları, özellikle oyun kayıtlarını, kendin yedekle.",
 
   "lang.auto": "Otomatik ({name})",
   "lang.aiNote": "Bu çeviri bir yapay zekâ tarafından yapıldı ve hata içerebilir.",
